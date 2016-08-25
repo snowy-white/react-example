@@ -1,0 +1,34 @@
+body{
+    padding: 20px;
+}
+
+.main{
+    width: 550px;
+}
+#font1{
+    font-size: 16px;
+    font-weight: bold;
+    color:cornflowerblue;
+
+}
+
+#todo-new{
+    width: 550px;
+}
+#todo-list{
+    color:red;
+}
+
+#btn1{
+    position: absolute;
+    left: 500px;
+    width: 60px;
+    background-color:white;
+}
+
+#btn2{
+    position: absolute;
+    left: 440px;
+    width: 60px;
+    background-color:white;
+}
