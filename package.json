@@ -1,0 +1,24 @@
+{
+  "name": "react-TodoMVC",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Code from the React example.",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Johnson Liu",
+  "bugs": {
+    "url": "https://github.com/reactjs/react-tutorial/issues"
+  },
+  "homepage": "https://github.com/reactjs/react-tutorial",
+  "engines" : {
+    "node" : "6.2.0"
+  }
+}

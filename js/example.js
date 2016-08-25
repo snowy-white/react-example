@@ -91,12 +91,33 @@ var ListTodo=React.createClass({
         item.flag=false;
       }
     })
-    console.log(this.props.todo);
     this.props.onDel(this.props.todo,this.props.doCount,this.props.todo);
 
   },
+  /*handleColor:function(){
+    this.props.todo.map(function(item){
+      if(item.flag==false)
+      {
+        return "lightslategray";
+      }
+      else{
+        return "red";
+      }
+    })
+  },
+    handleFont:function(){
+    this.props.todo.map(function(item){
+      if(item.flag==false)
+      {
+        return "italic";
+      }
+      else{
+        return "normal";
+      }
+    })
+  },*/
   render: function(){
-    console.log(this.props.todo);
+   // console.log(this.props.todo);
     return (
       <ul id="todo-list">
       {//显示数据,this.props.todo获取父组件传来的数据
@@ -120,22 +141,18 @@ var SelectTodo=React.createClass({
     var obj=document.getElementsByName("radio");
     for(var i=0;i<obj.length;i++){
       if(obj[i].value=="all" && obj[i].checked){
-        console.log(this.props.doBack);
         this.props.onSel(this.props.doBack,this.props.doCount,this.props.doBack);
       }
       else if(obj[i].value=="finish" && obj[i].checked){
-        console.log(this.props.doBack);
         var arr=[];
         this.props.doBack.map(function(item){
           if(item.flag==false){
             arr.push(item);
           }
         })
-        console.log(arr);
-        
         this.props.onSel(arr,this.props.doCount,this.props.doBack);
       }
-      else{
+      else if(obj[i].value=="undo" && obj[i].checked){
         var arrs=[];
         this.props.doBack.map(function(item){
           if(item.flag==true){
