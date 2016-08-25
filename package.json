@@ -15,9 +15,9 @@
   },
   "author": "Johnson Liu",
   "bugs": {
-    "url": "https://github.com/reactjs/react-tutorial/issues"
+    "url": "https://github.com/snowy-white/react-example/tree/master"
   },
-  "homepage": "https://github.com/reactjs/react-tutorial",
+  "homepage": "https://github.com/snowy-white",
   "engines" : {
     "node" : "6.2.0"
   }
