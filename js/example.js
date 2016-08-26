@@ -21,7 +21,7 @@ var TodoList=React.createClass({
           {/*按条件显示任务，全部显示，显示已做的，显示未做的 */}
           <SelectTodo onSel={this.handleChange} todo={this.state.data} doCount={this.state.count} doBack={this.state.backup}/>
           {/*统计任务总数 */}
-          <CountTodo  doCount={this.state.count}/>
+          <CountTodo  doCount={this.state.count} todo={this.state.data} doBack={this.state.backup}/>
       </div>
     );
   }
@@ -148,7 +148,7 @@ var SelectTodo=React.createClass({
   },
   render:function(){
     return (
-      <div>
+      <div className="ra">
       <input type="radio" name="radio" value="all"  onClick={this.handleSel}/>All    
       <input type="radio" name="radio" value="finish" onClick={this.handleSel}/>Finished    
       <input type="radio" name="radio" value="undo" onClick={this.handleSel}/>Undo
@@ -161,9 +161,21 @@ var SelectTodo=React.createClass({
 //CountTodo用于统计任务总数
 var CountTodo=React.createClass({
   render:function(){
+  //  var num=this.props.doBack.length;
+    var count1=0;
+    var count2=0;
+    this.props.doBack.map(function(item){
+        if(item.flag==true){
+            count1++;
+        }
+        else{
+            count2++;
+        }
+
+    })
     return(
-      <div>
-      <p id="font1">Total number of task: {this.props.doCount}</p>
+      <div className="num">
+      <p> Total task: {this.props.doCount}    |    Finished task：{count2}    |    Undo task：{count1}</p>
       </div>
 
     );
