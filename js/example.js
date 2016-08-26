@@ -1,12 +1,9 @@
-
-
 //该组件将“新增”和“列表显示”集合
 var TodoList=React.createClass({
   //初始化数据，todolist的数据由state来控制
   getInitialState: function(){
     return {data:[],count:0,backup:[]};
   },
-
   //接收一个传入的数据，并将它实时更新到组件的state
   handleChange:function(rows,num,backup){
     this.setState({
@@ -74,7 +71,7 @@ var ListTodo=React.createClass({
       }
     })
     // 更新数据，并使用 onDel 更新到 TodoList 的 state 中，以便 React自动render
-    this.props.todo.splice(index, 1);
+   delete this.props.todo[index];
     //数据减1
     var num=this.props.doCount-1;
     this.props.onDel(this.props.todo,num,this.props.todo);
@@ -84,8 +81,7 @@ var ListTodo=React.createClass({
   handleDone:function(e){
     var index = e.target.getAttribute('data-key');
     var node=document.getElementById(index);
-    node.style.color="lightslategray";
-    node.style.fontStyle="italic";
+  //  node.className="font2";
     this.props.todo.map(function(item){
       if(item.id==index){
         item.flag=false;
@@ -94,39 +90,26 @@ var ListTodo=React.createClass({
     this.props.onDel(this.props.todo,this.props.doCount,this.props.todo);
 
   },
-  /*handleColor:function(){
-    this.props.todo.map(function(item){
-      if(item.flag==false)
-      {
-        return "lightslategray";
-      }
-      else{
-        return "red";
-      }
-    })
+  handleStyle:function(item){
+    if(item.flag==true)
+    {
+        return "font3";
+    }
+    else{
+        return "font2";
+    }
   },
-    handleFont:function(){
-    this.props.todo.map(function(item){
-      if(item.flag==false)
-      {
-        return "italic";
-      }
-      else{
-        return "normal";
-      }
-    })
-  },*/
   render: function(){
-   // console.log(this.props.todo);
+    //console.log(this.props.todo);
     return (
       <ul id="todo-list">
       {//显示数据,this.props.todo获取父组件传来的数据
         this.props.todo.map(function(item){
           return (
-            <li>
-                <lable id={item.id}>{item.text}</lable>
-                <button id="btn2"className="done" onClick={this.handleDone} data-key={item.id}>Done</button>
-                <button id="btn1"className="delete" onClick={this.handleDel} data-key={item.id}>Remove</button>
+            <li key={item.id}>
+                <lable id={item.id} className={this.handleStyle(item)}>{item.text}</lable>
+                <button className="done" onClick={this.handleDone} data-key={item.id}>Done</button>
+                <button className="delete" onClick={this.handleDel} data-key={item.id}>Remove</button>
             </li>
           );
         }.bind(this)) // {/* 绑定函数的执行this - 以便 this.handleDel */}
