@@ -16,11 +16,21 @@ body{
     width: 550px;
 }
 #todo-list{
-    color:red;
+    
     list-style-type: none
 }
 
-#btn1{
+.font2{
+    color: lightslategray;
+    font-style: italic;
+}
+
+.font3{
+    color:red;
+    font-style: normal;
+}
+
+.delete{
     position: absolute;
     left: 500px;
     width: 60px;
@@ -32,12 +42,12 @@ body{
     cursor: pointer;
 }
 
-#btn1:hover {
+.delete:hover {
     background-color: #4CAF50;
     color: white;
 }
 
-#btn2{
+.done{
     position: absolute;
     left: 440px;
     width: 60px;
@@ -49,7 +59,7 @@ body{
     cursor: pointer;
 }
 
-#btn2:hover {
+.done:hover {
     background-color: #4CAF50;
     color: white;
 }
