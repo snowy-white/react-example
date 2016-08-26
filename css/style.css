@@ -5,18 +5,12 @@ body{
 .main{
     width: 550px;
 }
-#font1{
-    font-size: 16px;
-    font-weight: bold;
-    color:cornflowerblue;
-
-}
 
 #todo-new{
     width: 550px;
 }
 #todo-list{
-    
+    line-height: 25px;
     list-style-type: none
 }
 
@@ -26,7 +20,7 @@ body{
 }
 
 .font3{
-    color:red;
+    color:palevioletred;
     font-style: normal;
 }
 
@@ -62,4 +56,17 @@ body{
 .done:hover {
     background-color: #4CAF50;
     color: white;
+}
+
+.ra{
+    padding-left: 30px;
+    color: indigo;
+    
+}
+.num{
+    border-bottom: solid 1px gray;
+    font-size: 16px;
+    font-weight: bold;
+    color:cornflowerblue;
+    padding-left: 30px;
 }
