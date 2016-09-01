@@ -12,6 +12,8 @@
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
+
+// remove useless code or modules, also in package.json
 var bodyParser = require('body-parser');
 var app = express();
 

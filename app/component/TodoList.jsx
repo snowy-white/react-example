@@ -11,7 +11,7 @@ class TodoList extends Component {
             if (item.id == delIndex) {
                 index = i;
             }
-        })
+        });
         delete this.props.task[index];
        // this.props.task.length--;
         this.props.delTask(this.props.task, this.props.states);
@@ -23,7 +23,7 @@ class TodoList extends Component {
             if (item.id == index) {
                 item.flag = false;
             }
-        })
+        });
         this.props.delTask(this.props.task, this.props.states);
     }
     handleFilterU(element) {

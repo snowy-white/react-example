@@ -198,25 +198,40 @@
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
 	    try {
-	        cachedSetTimeout = setTimeout;
-	    } catch (e) {
-	        cachedSetTimeout = function () {
-	            throw new Error('setTimeout is not defined');
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
 	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
 	    try {
-	        cachedClearTimeout = clearTimeout;
-	    } catch (e) {
-	        cachedClearTimeout = function () {
-	            throw new Error('clearTimeout is not defined');
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
 	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -237,6 +252,11 @@
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -21523,7 +21543,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -21541,55 +21561,70 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var TodoForm = function (_Component) {
-	    _inherits(TodoForm, _Component);
+	  _inherits(TodoForm, _Component);
 
-	    function TodoForm(props) {
-	        _classCallCheck(this, TodoForm);
+	  function TodoForm(props) {
+	    _classCallCheck(this, TodoForm);
 
-	        var _this = _possibleConstructorReturn(this, (TodoForm.__proto__ || Object.getPrototypeOf(TodoForm)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (TodoForm.__proto__ || Object.getPrototypeOf(TodoForm)).call(this, props));
 
-	        _this.state = {
-	            value: ''
-	        };
-	        return _this;
+	    _this.state = {
+	      value: ''
+	    };
+	    return _this;
+	  }
+
+	  _createClass(TodoForm, [{
+	    key: 'handleChangeValue',
+	    value: function handleChangeValue(event) {
+	      this.setState({ value: event.target.value });
 	    }
 
-	    _createClass(TodoForm, [{
-	        key: 'handleChangeValue',
-	        value: function handleChangeValue(event) {
-	            this.setState({ value: event.target.value });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var value = this.state.value;
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'form',
-	                    { onSubmit: this.handleAdd.bind(this) },
-	                    _react2.default.createElement('input', { type: 'text', ref: 'inputnew', id: 'todo-new', placeholder: 'typing a newthing todo', value: value, onChange: this.handleChangeValue.bind(this) })
-	                )
-	            );
-	        }
-	    }, {
-	        key: 'handleAdd',
-	        value: function handleAdd(e) {
-	            e.preventDefault();
-	            var newthing = this.refs.inputnew.value.trim();
-	            var rows = this.props.task;
-	            var d = new Date();
-	            var t = d.getTime();
-	            if (newthing != '') {
-	                rows.push({ id: t, text: newthing, flag: true });
-	                this.props.addTask(rows, "all");
-	            }
-	        }
-	    }]);
+	    // Does it chinglish? 'typing a newthing todo'
 
-	    return TodoForm;
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      // var value = this.state.value;
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.handleAdd.bind(this) },
+	          _react2.default.createElement('input', { type: 'text', ref: 'inputnew', id: 'todo-new', placeholder: 'typing a newthing todo', value: this.state.value, onChange: this.handleChangeValue.bind(this) })
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'handleAdd',
+	    value: function handleAdd(e) {
+	      e.preventDefault();
+	      // var newthing = this.refs.inputnew.value.trim();
+	      // var newthing = this.state.value;
+	      // var rows = this.props.task;
+	      var taskName = this.state.value.trim();
+	      var task = this.props.task;
+
+	      // var d = new Date();
+	      // var t = d.getTime();
+
+	      if (taskName != '') {
+	        // rows.push({id: t, text: newthing, flag: true});
+	        task.push({ id: new Date().getTime(), text: taskName, flag: true });
+	        this.props.addTask(task, "all");
+	      }
+
+	      this.setState({ value: '' });
+	    }
+	  }]);
+
+	  return TodoForm;
 	}(_react.Component);
+
+	TodoForm.propTypes = {
+	  addTask: _react.PropTypes.func.isRequired
+	};
 
 	exports.default = TodoForm;
 
@@ -21665,6 +21700,8 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            var arr = [];
 	            if (this.props.states == "all") {
 	                arr = this.props.task;
@@ -21681,8 +21718,8 @@
 	                    'ul',
 	                    { id: 'todo-list' },
 	                    arr.map(function (item) {
-	                        return _react2.default.createElement(TodoItem, { item: item, key: item.id, Done: this.handleDone.bind(this), Del: this.handleDel.bind(this) });
-	                    }.bind(this))
+	                        return _react2.default.createElement(TodoItem, { item: item, key: item.id, Done: _this2.handleDone.bind(_this2), Del: _this2.handleDel.bind(_this2) });
+	                    })
 	                )
 	            );
 	        }
@@ -21851,8 +21888,8 @@
 	    _createClass(TodoCount, [{
 	        key: "render",
 	        value: function render() {
-	            var count1 = 0;
-	            var count2 = 0;
+	            var count1 = 0; // variable name semantization
+	            var count2 = 0; // variable name semantization
 	            this.props.task.map(function (item) {
 	                if (item.flag == true) {
 	                    count1++;

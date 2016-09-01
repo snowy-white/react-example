@@ -58,11 +58,18 @@ body{
     color: white;
 }
 
+/* what's the mean of this class name?
+   recommended semantization
+ */
 .ra{
     padding-left: 30px;
     color: indigo;
-    
+
 }
+
+/* what's the mean of this class name?
+   recommended semantization
+ */
 .num{
     border-bottom: solid 1px gray;
     font-size: 16px;
