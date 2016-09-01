@@ -13,11 +13,11 @@
     },
     "dependencies": {
         "react": "^15.2.0",
-        "react-dom": "^15.2.0",
-        "body-parser": "^1.4.3",
-        "express": "^4.4.5"
+        "react-dom": "^15.2.0"
     },
     "devDependencies": {
+        "body-parser": "^1.4.3",
+        "express": "^4.4.5",
         "babel-core": "^6.9.1",
         "babel-eslint": "^6.1.0",
         "babel-loader": "^6.2.4",
