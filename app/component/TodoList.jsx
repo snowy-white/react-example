@@ -7,7 +7,7 @@ class TodoList extends Component {
     handleDel(e) {
         var index = 0;
         var delIndex = e.target.getAttribute('data-key');
-        this.props.task.map(function (item, i) {
+        this.props.task.map((item, i) =>{
             if (item.id == delIndex) {
                 index = i;
             }
@@ -19,7 +19,7 @@ class TodoList extends Component {
     handleDone(e) {
         var index = e.target.getAttribute('data-key');
         var node = document.getElementById(index);
-        this.props.task.map(function (item) {
+        this.props.task.map((item)=> {
             if (item.id == index) {
                 item.flag = false;
             }
@@ -49,11 +49,11 @@ class TodoList extends Component {
             <div>
                 <ul id="todo-list">
                     {
-                        arr.map(function (item) {
+                        arr.map((item)=> {
                             return (
                                 <TodoItem item={item} key={item.id} Done={this.handleDone.bind(this) } Del={this.handleDel.bind(this) }/>
                             );
-                        }.bind(this))
+                        })
                     }
                 </ul>
             </div>
