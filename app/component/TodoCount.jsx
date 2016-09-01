@@ -7,7 +7,7 @@ class TodoCount extends Component {
     render() {
         var count1 = 0;
         var count2 = 0;
-        this.props.task.map(function (item) {
+        this.props.task.map((item)=> {
             if (item.flag == true) {
                 count1++;
             }
