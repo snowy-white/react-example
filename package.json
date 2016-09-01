@@ -6,9 +6,7 @@
     "license": "",
     "repository": {},
     "scripts": {
-        "clean": "gulp clean:all",
-        "build": "gulp",
-        "build-debug": "gulp build:debug",
+        "build": "webpack --display-error-details",
         "start": "node server.js"
     },
     "dependencies": {

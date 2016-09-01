@@ -1,0 +1,3 @@
+what does the mean of this folder?
+Looks like useless.
+All of js dependencies would be npm package. 

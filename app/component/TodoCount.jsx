@@ -5,8 +5,8 @@ class TodoCount extends Component {
         super(props);
     }
     render() {
-        var count1 = 0;
-        var count2 = 0;
+        var count1 = 0; // variable name semantization
+        var count2 = 0; // variable name semantization
         this.props.task.map((item)=> {
             if (item.flag == true) {
                 count1++;
