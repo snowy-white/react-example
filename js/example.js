@@ -1,97 +1,134 @@
-//该组件将“新增”和“列表显示”集合
 /* 
-    A component of todo list
+    A component of TodoList
+    add:add a new task
+    show:show all tasks
+    select task:show all tasks or finished tasks or activity tasks
+    count:count the number of tasks
  */
 var TodoList=React.createClass({
-  //初始化数据，todolist的数据由state来控制,f控制显示的数据内容：全部 已做 未做？
   getInitialState: function(){
-    return {data:[],count:0,f:"all"};
+    return {task:[],count:0,flag:"all"};
   },
-  //接收一个传入的数据，并将它实时更新到组件的state
-  handleChange:function(rows,num,f){
+  handleChange:function(data,num,flag){
     this.setState({
-      data:rows,count:num,f:f
+      task:data,count:num,flag:flag
     });
   },
   render: function(){
     return (
       <div>
           <h1>ToDoMVC System</h1>
-          {/*集成TypeNew组件,传入onAdd和todo，实时更新数据 */}
-          <TypeNew onAdd={this.handleChange} todo={this.state.data} doCount={this.state.count} doFlag={this.state.f}/>
-          {/*集成TodoList组件，todo 将todolist的数据传入到组件，用于组件展示数据,onDel用于删除数据时更新*/}
-          <ListTodo onDel={this.handleChange} todo={this.state.data} doCount={this.state.count} doFlag={this.state.f}/>
-          {/*按条件显示任务，全部显示，显示已做的，显示未做的 */}
-          <SelectTodo onSel={this.handleChange} todo={this.state.data} doCount={this.state.count} doFlag={this.state.f}/>
-          {/*统计任务总数 */}
-          <CountTodo  doCount={this.state.count} todo={this.state.data} doFlag={this.state.f}/>
+          <AddNewTask addTask={this.handleChange} tasks={this.state.task} counts={this.state.count} state={this.state.flag}/>
+          <ShowTask delTask={this.handleChange} tasks={this.state.task} counts={this.state.count} state={this.state.flag}/>
+          <SelectTask selTask={this.handleChange} tasks={this.state.task} counts={this.state.count} state={this.state.flag}/>
+          <CountTask  counts={this.state.count} tasks={this.state.task} />
       </div>
     );
   }
 });
 
-//TypeNew用于新增数据,从input中获取数据，将数据push到todo中，然后
-//使用onAdd调用TodoList的handleChange来更新state,react自动render
-var TypeNew=React.createClass({
+/*
+    A component of AddNewTask:
+    write a new task in the input to "Enter" to add a new task
+*/
+var AddNewTask=React.createClass({
   handleAdd:function(e){
     e.preventDefault();
-    //通过refs获取dom元素,然后获取输入内容
-  //  var inputDom=this.refs.inputnew.getDOMNode();
     var newthing=this.refs.inputnew.value.trim();
-    //获取传入的data数据
-    var rows=this.props.todo;
-    //数据加1
-    var num=this.props.doCount+1;
+    var rows=this.props.tasks;
+    var num=this.props.counts+1;
     var d=new Date();
     var t=d.getTime();
     if(newthing!=''){
-      //更新数据，并使用onAdd更新到TodoList组件的state中
       rows.push({id:t,text:newthing,flag:true});
-      this.props.onAdd(rows,num,this.props.doFlag);
+      this.props.addTask(rows,num,this.props.state);
     }
-    this.refs.inputnew.value='';
+  },
+  getInitialState: function() {
+    return {value: ''};
+  },
+  handleChangeValue: function(event) {
+    this.setState({value: event.target.value});
   },
   render: function(){
+    var value=this.state.value;
     return (
+      <div>
       <form onSubmit={this.handleAdd}>
-          <input type="text" ref="inputnew" id="todo-new" placeholder="typing a newthing todo"/>
+          <input type="text" ref="inputnew" id="todo-new" placeholder="typing a newthing todo" value={value} onChange={this.handleChangeValue}/> 
       </form>
+      </div>
+      
     );
   }
 });
 
-//ListTodo用于显示任务
-var ListTodo=React.createClass({
+/*
+    A component of ShowTask:
+    show the tasks in the view
+*/
+var ShowTask=React.createClass({
   handleDel:function(e){
     var index=0;
     var delIndex = e.target.getAttribute('data-key');
-    this.props.todo.map(function(item,i){
+    this.props.tasks.map(function(item,i){
       if(item.id==delIndex){
         index=i;
       }
     })
-    // 更新数据，并使用 onDel 更新到 TodoList 的 state 中，以便 React自动render
-   delete this.props.todo[index];
-    //数据减1
-    var num=this.props.doCount-1;
-    this.props.onDel(this.props.todo,num,this.props.doFlag);
+   delete this.props.tasks[index];
+    var num=this.props.counts-1;
+    this.props.delTask(this.props.tasks,num,this.props.state);
   },
-
-  //已做任务更新
   handleDone:function(e){
     var index = e.target.getAttribute('data-key');
     var node=document.getElementById(index);
-  //  node.className="font2";
-    this.props.todo.map(function(item){
+    this.props.tasks.map(function(item){
       if(item.id==index){
         item.flag=false;
       }
     })
-    this.props.onDel(this.props.todo,this.props.doCount,this.props.doFlag);
+    this.props.delTask(this.props.tasks,this.props.counts,this.props.state);
+  },
+  handleFilterU:function(element){
+      return element.flag==true;
 
   },
-  //control the style
-  handleStyle:function(item){
+  handleFilterF:function(element){
+      return element.flag==false;
+
+  },
+  render:function(){
+    var arr=[];
+    if(this.props.state=="all"){
+         arr=this.props.tasks;
+    }
+    else if(this.props.state=="finish"){
+         arr=this.props.tasks.filter(this.handleFilterF);
+    }
+    else if(this.props.state=="undo"){
+         arr=this.props.tasks.filter(this.handleFilterU);
+    }
+    return (
+      <ul id="todo-list">
+      {
+        arr.map(function(item){
+          return (
+            <Atask item={item} key={item.id} Done={this.handleDone} Del={this.handleDel}/>
+          );
+        }.bind(this)) 
+      }
+      </ul>
+    );
+  }
+});
+
+/*
+    A component of Atask:
+    take each task as a independent component
+ */
+var Atask=React.createClass({
+   handleStyle:function(item){
     if(item.flag==true)
     {
         return "font3";
@@ -100,59 +137,33 @@ var ListTodo=React.createClass({
         return "font2";
     }
   },
-  //filter undo task
-  handleFilterU:function(element){
-      return element.flag==true;
-
-  },
-  //filter finish task
-  handleFilterF:function(element){
-      return element.flag==false;
-
-  },
-  render: function(){
-    //console.log(this.props.todo);
-    var arr=[];
-    if(this.props.doFlag=="all"){
-         arr=this.props.todo;
-    }
-    else if(this.props.doFlag=="finish"){
-         arr=this.props.todo.filter(this.handleFilterF);
-    }
-    else if(this.props.doFlag=="undo"){
-         arr=this.props.todo.filter(this.handleFilterU);
-    }
-    //console.log(arr);
+  render:function(){
     return (
-      <ul id="todo-list">
-      {//显示数据,this.props.todo获取父组件传来的数据
-        arr.map(function(item){
-          return (
-            <li key={item.id}>
-                <lable id={item.id} className={this.handleStyle(item)}>{item.text}</lable>
-                <button className="done" onClick={this.handleDone} data-key={item.id}>Done</button>
-                <button className="delete" onClick={this.handleDel} data-key={item.id}>Remove</button>
-            </li>
-          );
-        }.bind(this)) 
-      }
-      </ul>
+      <li>
+          <lable id={this.props.item.id} className={this.handleStyle(this.props.item)}>{this.props.item.text}</lable>
+          <button className="done" onClick={this.props.Done} data-key={this.props.item.id}>Done</button>
+          <button className="delete" onClick={this.props.Del} data-key={this.props.item.id}>Remove</button>
+      </li>
     );
   }
 });
-//按条件显示数据
-var SelectTodo=React.createClass({
-  handleSel:function(){
+
+/*
+    A component of SelectTask:
+    show the tasks of all or finished or undo
+ */
+var SelectTask=React.createClass({
+   handleSel:function(){
     var obj=document.getElementsByName("radio");
     for(var i=0;i<obj.length;i++){
       if(obj[i].value=="all" && obj[i].checked){
-        this.props.onSel(this.props.todo,this.props.doCount,"all");
+        this.props.selTask(this.props.tasks,this.props.counts,"all");
       }
       else if(obj[i].value=="finish" && obj[i].checked){
-        this.props.onSel(this.props.todo,this.props.doCount,"finish");
+        this.props.selTask(this.props.tasks,this.props.counts,"finish");
       }
       else if(obj[i].value=="undo" && obj[i].checked){
-        this.props.onSel(this.props.todo,this.props.doCount,"undo");
+        this.props.selTask(this.props.tasks,this.props.counts,"undo");
       }
     }
   },
@@ -167,13 +178,16 @@ var SelectTodo=React.createClass({
     );
   }
 });
-//CountTodo用于统计任务总数
-var CountTodo=React.createClass({
+
+/*
+    A component of CountTask:
+    count the number of all tasks,finished tasks and undo tasks
+ */
+var CountTask=React.createClass({
   render:function(){
-  //  var num=this.props.doBack.length;
     var count1=0;
     var count2=0;
-    this.props.todo.map(function(item){
+    this.props.tasks.map(function(item){
         if(item.flag==true){
             count1++;
         }
@@ -183,14 +197,16 @@ var CountTodo=React.createClass({
     })
     return(
       <div className="num">
-      <p> Total task: {this.props.doCount}    |    Finished task：{count2}    |    Undo task：{count1}</p>
+      <p> Total task: {this.props.counts}    |    Finished task：{count2}    |    Undo task：{count1}</p>
       </div>
-
     );
-  }
 
+  }
 });
-//将TodoList渲染到界面
+
+/*
+   Render the component of TodoList
+*/
 ReactDOM.render(
   <TodoList />,
   document.getElementById('content')
