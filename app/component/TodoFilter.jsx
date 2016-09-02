@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
-class TodoSel extends Component {
+class TodoFilter extends Component {
     constructor(props) {
         super(props);
     }
     handleSel() {
-        var obj = document.getElementsByName("radio");
-        for (var i = 0; i < obj.length; i++) {
+        let obj = document.getElementsByName("radio");
+        for (let i = 0; i < obj.length; i++) {
             if (obj[i].value == "all" && obj[i].checked) {
-                this.props.selTask(this.props.task, "all");
+                this.props.selTask("all");
             }
             else if (obj[i].value == "finish" && obj[i].checked) {
-                this.props.selTask(this.props.task, "finish");
+                this.props.selTask("finish");
             }
             else if (obj[i].value == "undo" && obj[i].checked) {
-                this.props.selTask(this.props.task, "undo");
+                this.props.selTask("undo");
             }
         }
     }
@@ -31,4 +31,8 @@ class TodoSel extends Component {
     }
 }
 
-export default TodoSel;
+TodoFilter.PropTypes={
+    selTask:PropTypes.func.isRequired
+}
+
+export default TodoFilter;

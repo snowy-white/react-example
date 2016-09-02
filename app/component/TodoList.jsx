@@ -1,49 +1,32 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 class TodoList extends Component {
     constructor(props) {
         super(props);
     }
     handleDel(e) {
-        var index = 0;
-        var delIndex = e.target.getAttribute('data-key');
-        this.props.task.map((item, i) =>{
-            if (item.id == delIndex) {
-                index = i;
-            }
-        })
-        delete this.props.task[index];
-       // this.props.task.length--;
-        this.props.delTask(this.props.task, this.props.states);
+        let delIndex = e.target.getAttribute('data-key');
+        this.props.delTask(delIndex);
     }
     handleDone(e) {
-        var index = e.target.getAttribute('data-key');
-        var node = document.getElementById(index);
-        this.props.task.map((item)=> {
-            if (item.id == index) {
-                item.flag = false;
-            }
-        })
-        this.props.delTask(this.props.task, this.props.states);
-    }
-    handleFilterU(element) {
-        return element.flag == true;
-    }
-    handleFilterF(element) {
-        return element.flag == false;
-
+        let index = e.target.getAttribute('data-key');
+        this.props.doneTask(index);
     }
     render() {
-        var arr = [];
-        if (this.props.states == "all") {
-            arr = this.props.task;
-            //console.log(this.props.task);
+        let arr = [];
+        const {task,mark}=this.props;
+        if (mark == "all") {
+            arr = task;
         }
-        else if (this.props.states == "finish") {
-            arr = this.props.task.filter(this.handleFilterF);
+        else if (mark == "finish") {
+            arr = task.filter((element)=>{
+                return element.flag == false;
+            });
         }
-        else if (this.props.states == "undo") {
-            arr = this.props.task.filter(this.handleFilterU);
+        else if (mark == "undo") {
+            arr = task.filter((element)=>{
+                return element.flag == true;
+            });
         }
         return (
             <div>
@@ -51,7 +34,8 @@ class TodoList extends Component {
                     {
                         arr.map((item)=> {
                             return (
-                                <TodoItem item={item} key={item.id} Done={this.handleDone.bind(this) } Del={this.handleDel.bind(this) }/>
+                                <TodoItem item={item} key={item.id} Done={this.handleDone.bind(this) } 
+                                Del={this.handleDel.bind(this) }/>
                             );
                         })
                     }
@@ -82,4 +66,12 @@ class TodoItem extends Component {
         );
     }
 }
+
+TodoList.PropTypes = {
+    delTask: PropTypes.func.isRequired,
+    doneTask: PropTypes.func.isRequired,
+    task:PropTypes.array.isRequired,
+    mark:PropTypes.string.isRequired
+};
+
 export default TodoList;

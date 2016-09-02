@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
-import TodoSel from './TodoSel';
+import TodoFilter from './TodoFilter';
 import TodoCount from './TodoCount';
 
 class Todo extends Component {
@@ -10,24 +10,66 @@ class Todo extends Component {
         this.state = {
             task: [], flag: "all"
         };
-        this.handleChange = this.handleChange.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleDel = this.handleDel.bind(this);
+        this.handleFilter = this.handleFilter.bind(this);
+        this.handleDone = this.handleDone.bind(this);
     }
     render() {
         return (
             <div>
                 <h1>ToDoMVC System</h1>
-                <TodoForm task={this.state.task} addTask={this.handleChange} states={this.state.flag}/>
-                <TodoList task={this.state.task} delTask={this.handleChange} states={this.state.flag}/>
-                <TodoSel task={this.state.task} selTask={this.handleChange} states={this.state.flag}/>
+                <TodoForm addTask={this.handleAdd} />
+                <TodoList task={this.state.task} mark={this.state.flag} delTask={this.handleDel} doneTask={this.handleDone} />
+                <TodoFilter selTask={this.handleFilter}/>
                 <TodoCount task={this.state.task}/>
             </div>
         );
     }
 
-    handleChange(data,flag) {
-        this.setState({
-            task: data, flag: flag
-        });
+    handleAdd(data) {
+        let {task} = this.state;
+        task.push(data);
+        this.setState({ task: task });
+    }
+
+    handleDel(id) {
+        let {task} = this.state;
+        let index = 0;
+        for (let i = 0; i < task.length; i++) {
+            if (id == task[i].id) {
+                index = i;
+                break;
+            }
+        }
+        /* task.map((item, i) => {
+             console.log(i);
+             if (id == item.id) {
+                 index = i;
+             }
+         });*/
+        delete task[index];
+        this.setState({ task: task });
+    }
+
+    handleDone(id) {
+        let {task} = this.state;
+        for (let i = 0; i < task.length; i++) {
+            if (id == task[i].id) {
+                task[i].flag = false;
+                break;
+            }
+        }
+        /* task.map((item, i) => {
+             if (id == item.id) {
+                 item.flag = false;
+             }
+         });*/
+        this.setState({ task: task });
+    }
+
+    handleFilter(flag) {
+        this.setState({ flag: flag });
     }
 }
 

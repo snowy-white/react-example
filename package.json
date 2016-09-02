@@ -6,9 +6,6 @@
     "license": "",
     "repository": {},
     "scripts": {
-        "clean": "gulp clean:all",
-        "build": "gulp",
-        "build-debug": "gulp build:debug",
         "start": "node server.js"
     },
     "dependencies": {
@@ -16,7 +13,6 @@
         "react-dom": "^15.2.0"
     },
     "devDependencies": {
-        "body-parser": "^1.4.3",
         "express": "^4.4.5",
         "babel-core": "^6.9.1",
         "babel-eslint": "^6.1.0",
@@ -34,6 +30,7 @@
         "html-webpack-plugin": "^2.21.0",
         "raw-loader": "^0.5.1",
         "style-loader": "^0.13.1",
+        "html-loader":"^0.4.3",
         "webpack": "^1.13.1"
     }
 }

@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+//var ExtractTextPlugin = require('extract-text-webpack-plugin');
+//var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webAppPath = path.resolve(__dirname, 'app');
 
 //console.log(webAppPath);
@@ -26,12 +27,18 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+        loader: "style!css"
+      },
+      {
+        test:/\.html$/,
+        loader:"html"
       }
+      
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json'],
+    extensions: ['', '.js', '.jsx', '.json','.css','.html'],
     alias:{'dir':'./component'}
   }
+  //plugins: [new HtmlWebpackPlugin()]
 };

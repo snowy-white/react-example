@@ -1,26 +1,32 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 class TodoCount extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        var count1 = 0;
-        var count2 = 0;
-        this.props.task.map((item)=> {
+        let undo = 0;
+        let finish = 0;
+        const {task}=this.props;
+        task.map((item)=> {
             if (item.flag == true) {
-                count1++;
+                undo++;
             }
             else {
-                count2++;
+                finish++;
             }
-        })
+        });
+        let all=undo+finish;
         return (
             <div className="num">
-                <p> Total task: {count1+count2}    |    Finished task：{count2}    |    Undo task：{count1}</p>
+                <p> Total task: {all}    |    Finished task：{finish}    |    Undo task：{undo}</p>
             </div>
         );
     }
 }
+
+TodoCount.PropTypes = {
+    task:PropTypes.arrayisRequired
+};
 
 export default TodoCount;

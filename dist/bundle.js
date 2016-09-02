@@ -57,6 +57,14 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
+	var _style = __webpack_require__(179);
+
+	var _style2 = _interopRequireDefault(_style);
+
+	var _index3 = __webpack_require__(183);
+
+	var _index4 = _interopRequireDefault(_index3);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
@@ -198,25 +206,40 @@
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
 	    try {
-	        cachedSetTimeout = setTimeout;
-	    } catch (e) {
-	        cachedSetTimeout = function () {
-	            throw new Error('setTimeout is not defined');
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
 	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
 	    try {
-	        cachedClearTimeout = clearTimeout;
-	    } catch (e) {
-	        cachedClearTimeout = function () {
-	            throw new Error('clearTimeout is not defined');
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
 	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -237,6 +260,11 @@
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -21454,9 +21482,9 @@
 
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 
-	var _TodoSel = __webpack_require__(177);
+	var _TodoFilter = __webpack_require__(177);
 
-	var _TodoSel2 = _interopRequireDefault(_TodoSel);
+	var _TodoFilter2 = _interopRequireDefault(_TodoFilter);
 
 	var _TodoCount = __webpack_require__(178);
 
@@ -21481,7 +21509,10 @@
 	        _this.state = {
 	            task: [], flag: "all"
 	        };
-	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.handleAdd = _this.handleAdd.bind(_this);
+	        _this.handleDel = _this.handleDel.bind(_this);
+	        _this.handleFilter = _this.handleFilter.bind(_this);
+	        _this.handleDone = _this.handleDone.bind(_this);
 	        return _this;
 	    }
 
@@ -21496,18 +21527,63 @@
 	                    null,
 	                    'ToDoMVC System'
 	                ),
-	                _react2.default.createElement(_TodoForm2.default, { task: this.state.task, addTask: this.handleChange, states: this.state.flag }),
-	                _react2.default.createElement(_TodoList2.default, { task: this.state.task, delTask: this.handleChange, states: this.state.flag }),
-	                _react2.default.createElement(_TodoSel2.default, { task: this.state.task, selTask: this.handleChange, states: this.state.flag }),
+	                _react2.default.createElement(_TodoForm2.default, { addTask: this.handleAdd }),
+	                _react2.default.createElement(_TodoList2.default, { task: this.state.task, mark: this.state.flag, delTask: this.handleDel, doneTask: this.handleDone }),
+	                _react2.default.createElement(_TodoFilter2.default, { selTask: this.handleFilter }),
 	                _react2.default.createElement(_TodoCount2.default, { task: this.state.task })
 	            );
 	        }
 	    }, {
-	        key: 'handleChange',
-	        value: function handleChange(data, flag) {
-	            this.setState({
-	                task: data, flag: flag
-	            });
+	        key: 'handleAdd',
+	        value: function handleAdd(data) {
+	            var task = this.state.task;
+
+	            task.push(data);
+	            this.setState({ task: task });
+	        }
+	    }, {
+	        key: 'handleDel',
+	        value: function handleDel(id) {
+	            var task = this.state.task;
+
+	            var index = 0;
+	            for (var i = 0; i < task.length; i++) {
+	                if (id == task[i].id) {
+	                    index = i;
+	                    break;
+	                }
+	            }
+	            /* task.map((item, i) => {
+	                 console.log(i);
+	                 if (id == item.id) {
+	                     index = i;
+	                 }
+	             });*/
+	            delete task[index];
+	            this.setState({ task: task });
+	        }
+	    }, {
+	        key: 'handleDone',
+	        value: function handleDone(id) {
+	            var task = this.state.task;
+
+	            for (var i = 0; i < task.length; i++) {
+	                if (id == task[i].id) {
+	                    task[i].flag = false;
+	                    break;
+	                }
+	            }
+	            /* task.map((item, i) => {
+	                 if (id == item.id) {
+	                     item.flag = false;
+	                 }
+	             });*/
+	            this.setState({ task: task });
+	        }
+	    }, {
+	        key: 'handleFilter',
+	        value: function handleFilter(flag) {
+	            this.setState({ flag: flag });
 	        }
 	    }]);
 
@@ -21569,7 +21645,8 @@
 	                _react2.default.createElement(
 	                    'form',
 	                    { onSubmit: this.handleAdd.bind(this) },
-	                    _react2.default.createElement('input', { type: 'text', ref: 'inputnew', id: 'todo-new', placeholder: 'typing a newthing todo', value: value, onChange: this.handleChangeValue.bind(this) })
+	                    _react2.default.createElement('input', { type: 'text', ref: 'inputnew', id: 'todo-new', placeholder: 'typing a newthing todo',
+	                        value: value, onChange: this.handleChangeValue.bind(this) })
 	                )
 	            );
 	        }
@@ -21577,19 +21654,22 @@
 	        key: 'handleAdd',
 	        value: function handleAdd(e) {
 	            e.preventDefault();
-	            var newthing = this.refs.inputnew.value.trim();
-	            var rows = this.props.task;
-	            var d = new Date();
-	            var t = d.getTime();
-	            if (newthing != '') {
-	                rows.push({ id: t, text: newthing, flag: true });
-	                this.props.addTask(rows, "all");
+	            var taskname = this.state.value.trim();
+	            if (taskname != '') {
+	                var task = { id: new Date().getTime(), text: taskname, flag: true };
+	                this.props.addTask(task);
 	            }
+
+	            this.setState({ value: '' });
 	        }
 	    }]);
 
 	    return TodoForm;
 	}(_react.Component);
+
+	TodoForm.PropTypes = {
+	    addTask: _react.PropTypes.func.isRequired
+	};
 
 	exports.default = TodoForm;
 
@@ -21629,50 +21709,35 @@
 	    _createClass(TodoList, [{
 	        key: 'handleDel',
 	        value: function handleDel(e) {
-	            var index = 0;
 	            var delIndex = e.target.getAttribute('data-key');
-	            this.props.task.map(function (item, i) {
-	                if (item.id == delIndex) {
-	                    index = i;
-	                }
-	            });
-	            delete this.props.task[index];
-	            // this.props.task.length--;
-	            this.props.delTask(this.props.task, this.props.states);
+	            this.props.delTask(delIndex);
 	        }
 	    }, {
 	        key: 'handleDone',
 	        value: function handleDone(e) {
 	            var index = e.target.getAttribute('data-key');
-	            var node = document.getElementById(index);
-	            this.props.task.map(function (item) {
-	                if (item.id == index) {
-	                    item.flag = false;
-	                }
-	            });
-	            this.props.delTask(this.props.task, this.props.states);
-	        }
-	    }, {
-	        key: 'handleFilterU',
-	        value: function handleFilterU(element) {
-	            return element.flag == true;
-	        }
-	    }, {
-	        key: 'handleFilterF',
-	        value: function handleFilterF(element) {
-	            return element.flag == false;
+	            this.props.doneTask(index);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            var arr = [];
-	            if (this.props.states == "all") {
-	                arr = this.props.task;
-	                //console.log(this.props.task);
-	            } else if (this.props.states == "finish") {
-	                arr = this.props.task.filter(this.handleFilterF);
-	            } else if (this.props.states == "undo") {
-	                arr = this.props.task.filter(this.handleFilterU);
+	            var _props = this.props;
+	            var task = _props.task;
+	            var mark = _props.mark;
+
+	            if (mark == "all") {
+	                arr = task;
+	            } else if (mark == "finish") {
+	                arr = task.filter(function (element) {
+	                    return element.flag == false;
+	                });
+	            } else if (mark == "undo") {
+	                arr = task.filter(function (element) {
+	                    return element.flag == true;
+	                });
 	            }
 	            return _react2.default.createElement(
 	                'div',
@@ -21681,8 +21746,9 @@
 	                    'ul',
 	                    { id: 'todo-list' },
 	                    arr.map(function (item) {
-	                        return _react2.default.createElement(TodoItem, { item: item, key: item.id, Done: this.handleDone.bind(this), Del: this.handleDel.bind(this) });
-	                    }.bind(this))
+	                        return _react2.default.createElement(TodoItem, { item: item, key: item.id, Done: _this2.handleDone.bind(_this2),
+	                            Del: _this2.handleDel.bind(_this2) });
+	                    })
 	                )
 	            );
 	        }
@@ -21741,6 +21807,13 @@
 	    return TodoItem;
 	}(_react.Component);
 
+	TodoList.PropTypes = {
+	    delTask: _react.PropTypes.func.isRequired,
+	    doneTask: _react.PropTypes.func.isRequired,
+	    task: _react.PropTypes.array.isRequired,
+	    mark: _react.PropTypes.string.isRequired
+	};
+
 	exports.default = TodoList;
 
 /***/ },
@@ -21767,26 +21840,26 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var TodoSel = function (_Component) {
-	    _inherits(TodoSel, _Component);
+	var TodoFilter = function (_Component) {
+	    _inherits(TodoFilter, _Component);
 
-	    function TodoSel(props) {
-	        _classCallCheck(this, TodoSel);
+	    function TodoFilter(props) {
+	        _classCallCheck(this, TodoFilter);
 
-	        return _possibleConstructorReturn(this, (TodoSel.__proto__ || Object.getPrototypeOf(TodoSel)).call(this, props));
+	        return _possibleConstructorReturn(this, (TodoFilter.__proto__ || Object.getPrototypeOf(TodoFilter)).call(this, props));
 	    }
 
-	    _createClass(TodoSel, [{
+	    _createClass(TodoFilter, [{
 	        key: "handleSel",
 	        value: function handleSel() {
 	            var obj = document.getElementsByName("radio");
 	            for (var i = 0; i < obj.length; i++) {
 	                if (obj[i].value == "all" && obj[i].checked) {
-	                    this.props.selTask(this.props.task, "all");
+	                    this.props.selTask("all");
 	                } else if (obj[i].value == "finish" && obj[i].checked) {
-	                    this.props.selTask(this.props.task, "finish");
+	                    this.props.selTask("finish");
 	                } else if (obj[i].value == "undo" && obj[i].checked) {
-	                    this.props.selTask(this.props.task, "undo");
+	                    this.props.selTask("undo");
 	                }
 	            }
 	        }
@@ -21810,10 +21883,14 @@
 	        }
 	    }]);
 
-	    return TodoSel;
+	    return TodoFilter;
 	}(_react.Component);
 
-	exports.default = TodoSel;
+	TodoFilter.PropTypes = {
+	    selTask: _react.PropTypes.func.isRequired
+	};
+
+	exports.default = TodoFilter;
 
 /***/ },
 /* 178 */
@@ -21851,15 +21928,18 @@
 	    _createClass(TodoCount, [{
 	        key: "render",
 	        value: function render() {
-	            var count1 = 0;
-	            var count2 = 0;
-	            this.props.task.map(function (item) {
+	            var undo = 0;
+	            var finish = 0;
+	            var task = this.props.task;
+
+	            task.map(function (item) {
 	                if (item.flag == true) {
-	                    count1++;
+	                    undo++;
 	                } else {
-	                    count2++;
+	                    finish++;
 	                }
 	            });
+	            var all = undo + finish;
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "num" },
@@ -21867,11 +21947,11 @@
 	                    "p",
 	                    null,
 	                    " Total task: ",
-	                    count1 + count2,
+	                    all,
 	                    "    |    Finished task：",
-	                    count2,
+	                    finish,
 	                    "    |    Undo task：",
-	                    count1
+	                    undo
 	                )
 	            );
 	        }
@@ -21880,7 +21960,365 @@
 	    return TodoCount;
 	}(_react.Component);
 
+	TodoCount.PropTypes = {
+	    task: _react.PropTypes.arrayisRequired
+	};
+
 	exports.default = TodoCount;
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(180);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(182)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/.0.23.1@css-loader/index.js!./style.css", function() {
+				var newContent = require("!!./../../node_modules/.0.23.1@css-loader/index.js!./style.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(181)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "body{\r\n    padding: 20px;\r\n}\r\n\r\n.main{\r\n    width: 550px;\r\n}\r\n\r\n#todo-new{\r\n    width: 550px;\r\n}\r\n#todo-list{\r\n    line-height: 25px;\r\n    list-style-type: none\r\n}\r\n\r\n.font2{\r\n    color: lightslategray;\r\n    font-style: italic;\r\n}\r\n\r\n.font3{\r\n    color:palevioletred;\r\n    font-style: normal;\r\n}\r\n\r\n.delete{\r\n    position: absolute;\r\n    left: 500px;\r\n    width: 60px;\r\n    background-color:white;\r\n    border:1px solid #a1a1a1;\r\n    border-radius:10px;\r\n    -webkit-transition-duration: 0.4s; /* Safari */\r\n    transition-duration: 0.4s;\r\n    cursor: pointer;\r\n}\r\n\r\n.delete:hover {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n}\r\n\r\n.done{\r\n    position: absolute;\r\n    left: 440px;\r\n    width: 60px;\r\n    background-color:white;\r\n    border:1px solid #a1a1a1;\r\n    border-radius:10px;\r\n    -webkit-transition-duration: 0.4s; /* Safari */\r\n    transition-duration: 0.4s;\r\n    cursor: pointer;\r\n}\r\n\r\n.done:hover {\r\n    background-color: #4CAF50;\r\n    color: white;\r\n}\r\n\r\n.ra{\r\n    padding-left: 30px;\r\n    color: indigo;\r\n    \r\n}\r\n.num{\r\n    width:550px;\r\n    border-bottom: solid 1px gray;\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n    color:cornflowerblue;\r\n    padding-left: 30px;\r\n}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 181 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 183 */
+/***/ function(module, exports) {
+
+	module.exports = "<!DOCTYPE html>\r\n<head>\r\n  <meta charset=\"UTF-8\" />\r\n  <title>Todo</title>\r\n</head>\r\n<body>\r\n  <div id=\"app\"></div>\r\n</body>\r\n</html>\r\n";
 
 /***/ }
 /******/ ]);
