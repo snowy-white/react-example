@@ -6,7 +6,8 @@
     "license": "",
     "repository": {},
     "scripts": {
-        "start": "node server.js"
+        "server": "node server.js",
+        "start": "webpack-dev-server"
     },
     "dependencies": {
         "react": "^15.2.0",
@@ -31,6 +32,7 @@
         "raw-loader": "^0.5.1",
         "style-loader": "^0.13.1",
         "html-loader":"^0.4.3",
-        "webpack": "^1.13.1"
+        "webpack": "^1.13.1",
+        "webpack-dev-server": "^1.6.5"
     }
 }
