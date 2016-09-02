@@ -42,12 +42,6 @@ class Todo extends Component {
                 break;
             }
         }
-        /* task.map((item, i) => {
-             console.log(i);
-             if (id == item.id) {
-                 index = i;
-             }
-         });*/
         delete task[index];
         this.setState({ task: task });
     }
@@ -60,11 +54,6 @@ class Todo extends Component {
                 break;
             }
         }
-        /* task.map((item, i) => {
-             if (id == item.id) {
-                 item.flag = false;
-             }
-         });*/
         this.setState({ task: task });
     }
 

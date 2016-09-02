@@ -7,7 +7,8 @@
     "repository": {},
     "scripts": {
         "server": "node server.js",
-        "start": "webpack-dev-server"
+        "start": "webpack-dev-server",
+        "build": "webpack --display-error-details"
     },
     "dependencies": {
         "react": "^15.2.0",
