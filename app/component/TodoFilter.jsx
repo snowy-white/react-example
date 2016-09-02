@@ -33,6 +33,6 @@ class TodoFilter extends Component {
 
 TodoFilter.PropTypes={
     selTask:PropTypes.func.isRequired
-}
+};
 
 export default TodoFilter;
