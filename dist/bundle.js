@@ -21547,18 +21547,17 @@
 	            var task = this.state.task;
 
 	            var index = 0;
-	            for (var i = 0; i < task.length; i++) {
+	            /*for (let i = 0; i < task.length; i++) {
 	                if (id == task[i].id) {
 	                    index = i;
 	                    break;
 	                }
-	            }
-	            /* task.map((item, i) => {
-	                 console.log(i);
-	                 if (id == item.id) {
-	                     index = i;
-	                 }
-	             });*/
+	            }*/
+	            task.map(function (item, i) {
+	                if (item.id == id) {
+	                    index = i;
+	                }
+	            });
 	            delete task[index];
 	            this.setState({ task: task });
 	        }
@@ -21566,18 +21565,18 @@
 	        key: 'handleDone',
 	        value: function handleDone(id) {
 	            var task = this.state.task;
-
-	            for (var i = 0; i < task.length; i++) {
-	                if (id == task[i].id) {
-	                    task[i].flag = false;
-	                    break;
-	                }
-	            }
-	            /* task.map((item, i) => {
-	                 if (id == item.id) {
-	                     item.flag = false;
+	            /* for (let i = 0; i < task.length; i++) {
+	                 if (id == task[i].id) {
+	                     task[i].flag = false;
+	                     break;
 	                 }
-	             });*/
+	             }*/
+
+	            task.map(function (item) {
+	                if (item.id == id) {
+	                    item.flag = false;
+	                }
+	            });
 	            this.setState({ task: task });
 	        }
 	    }, {

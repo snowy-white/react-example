@@ -6,8 +6,8 @@
     "license": "",
     "repository": {},
     "scripts": {
-        "server": "node server.js",
-        "start": "webpack-dev-server",
+        "start": "node server.js",
+        "starts": "webpack-dev-server",
         "build": "webpack --display-error-details"
     },
     "dependencies": {

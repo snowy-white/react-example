@@ -36,24 +36,34 @@ class Todo extends Component {
     handleDel(id) {
         let {task} = this.state;
         let index = 0;
-        for (let i = 0; i < task.length; i++) {
+        /*for (let i = 0; i < task.length; i++) {
             if (id == task[i].id) {
                 index = i;
                 break;
             }
-        }
+        }*/
+        task.map((item, i) => {
+            if (item.id == id) {
+                index = i;
+            }
+        });
         delete task[index];
         this.setState({ task: task });
     }
 
     handleDone(id) {
         let {task} = this.state;
-        for (let i = 0; i < task.length; i++) {
+       /* for (let i = 0; i < task.length; i++) {
             if (id == task[i].id) {
                 task[i].flag = false;
                 break;
             }
-        }
+        }*/
+        task.map((item) => {
+            if (item.id == id) {
+                item.flag = false;
+            }
+        });
         this.setState({ task: task });
     }
 
