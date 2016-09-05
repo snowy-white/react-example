@@ -6,7 +6,6 @@ class TodoFilter extends Component {
     }
     handleFilter(e) {
         let value=e.target.getAttribute('value');
-        console.log(value);
         if (value == "all") {
             this.props.filterTask("all");
         }
