@@ -15,7 +15,7 @@ class TodoForm extends Component {
         return (
             <div>
                 <form onSubmit={this.handleAdd.bind(this) }>
-                    <input type="text" ref="inputnew" id="todo-new" placeholder="typing a newthing todo" 
+                    <input type="text" ref="inputnew" id="todo-new" placeholder="typing a newthing todo"
                      value={value} onChange={this.handleChangeValue.bind(this) }/>
                 </form>
             </div>
@@ -24,8 +24,9 @@ class TodoForm extends Component {
     handleAdd(e) {
         e.preventDefault();
         let taskname = this.state.value.trim();
-        if (taskname !== '') {
-            let task={ taskid: (new Date()).getTime(), text: taskname, flag: true };
+        if (taskname) {
+            // flag should be status
+            let task={ text: taskname, flag: true };
             this.props.addTask(task);
         }
 

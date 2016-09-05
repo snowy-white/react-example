@@ -20,8 +20,8 @@ class Todo extends Component {
             <div>
                 <h1>ToDoMVC System</h1>
                 <TodoForm addTask={this.handleAdd} />
-                <TodoList task={this.state.tasks} filterType={this.state.filterType} delTask={this.handleDel} doneTask={this.handleDone} />
-                <TodoFilter filterTask={this.handleFilter}/>
+                <TodoList tasks={this.state.tasks} filterType={this.state.filterType} delTask={this.handleDel} doneTask={this.handleDone} />
+                <TodoFilter filterHandler={this.handleFilter}/>
                 <TodoCount task={this.state.tasks}/>
             </div>
         );
@@ -35,25 +35,26 @@ class Todo extends Component {
 
     handleDel(delindex) {
         let {tasks} = this.state;
-        let index = 0;
-        
-        tasks.map((item, i) => {
-            if (item.taskid === delindex) {
-                index = i;
-            }
-        });
-         tasks.splice(index,1);
+        // let index = 0;
+        //
+        // tasks.map((item, i) => {
+        //     if (item.taskid === delindex) {
+        //         index = i;
+        //     }
+        // });
+        tasks.splice(delindex,1);
         this.setState({ tasks});
     }
 
     handleDone(doneindex) {
         let {tasks} = this.state;
-        
-        tasks.map((item) => {
-            if (item.taskid == doneindex) {
-                item.flag = false;
-            }
-        });
+        //
+        // tasks.map((item) => {
+        //     if (item.taskid == doneindex) {
+        //         item.flag = false;
+        //     }
+        // });
+        tasks[doneindex].flag = false;
         this.setState({ tasks });
     }
 
