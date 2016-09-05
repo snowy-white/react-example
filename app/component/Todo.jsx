@@ -33,12 +33,12 @@ class Todo extends Component {
         this.setState({ tasks });
     }
 
-    handleDel(id) {
+    handleDel(delindex) {
         let {tasks} = this.state;
         let index = 0;
         
         tasks.map((item, i) => {
-            if (item.taskid === id) {
+            if (item.taskid === delindex) {
                 index = i;
             }
         });
@@ -46,11 +46,11 @@ class Todo extends Component {
         this.setState({ tasks});
     }
 
-    handleDone(id) {
+    handleDone(doneindex) {
         let {tasks} = this.state;
         
         tasks.map((item) => {
-            if (item.taskid == id) {
+            if (item.taskid == doneindex) {
                 item.flag = false;
             }
         });
