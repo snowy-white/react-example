@@ -6,13 +6,13 @@ class TodoFilter extends Component {
     }
     handleFilter(e) {
         let value=e.target.getAttribute('value');
-        if (value == "all") {
+        if (value === "all") {
             this.props.filterTask("all");
         }
-        else if (value == "finish") {
+        else if (value === "finish") {
             this.props.filterTask("finish");
         }
-        else if (value == "undo") {
+        else if (value === "undo") {
             this.props.filterTask("undo");
         }
 
