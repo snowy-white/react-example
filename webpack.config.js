@@ -25,16 +25,16 @@ module.exports = {
         loader: "style!css"
       },
       {
-        test:/\.html$/,
-        loader:"html"
+        test: /\.html$/,
+        loader: "html"
       }
-      
+
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json','.css','.html'],
+    extensions: ['', '.js', '.jsx', '.json', '.css', '.html'],
   },
   plugins: [new HtmlWebpackPlugin({
-    template:'public/index.html'
+    template: 'public/index.html'
   })]
 };

@@ -36,21 +36,20 @@ class Todo extends Component {
     handleDel(delindex) {
         let {tasks} = this.state;
         let index = 0;
-        
+
         tasks.map((item, i) => {
             if (item.taskid === delindex) {
                 index = i;
             }
         });
-         tasks.splice(index,1);
-        this.setState({ tasks});
+        tasks.splice(index, 1);
+        this.setState({ tasks });
     }
 
     handleDone(doneindex) {
         let {tasks} = this.state;
-        
         tasks.map((item) => {
-            if (item.taskid == doneindex) {
+            if (item.taskid === doneindex) {
                 item.flag = false;
             }
         });

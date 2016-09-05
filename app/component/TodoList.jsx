@@ -6,11 +6,11 @@ class TodoList extends Component {
     }
     handleDel(e) {
         let delIndex = e.target.getAttribute('data-key');
-        this.props.delTask(delIndex);
+        this.props.delTask(parseInt(delIndex));
     }
     handleDone(e) {
         let index = e.target.getAttribute('data-key');
-        this.props.doneTask(index);
+        this.props.doneTask(parseInt(index));
     }
     render() {
         let arr = [];
@@ -47,7 +47,7 @@ class TodoList extends Component {
 
 class TodoItem extends Component {
     handleStyle(item) {
-        if (item.flag == true) {
+        if (item.flag === true) {
             return "font3";
         }
         else {

@@ -31,7 +31,7 @@ body{
     background-color:white;
     border:1px solid #a1a1a1;
     border-radius:10px;
-    -webkit-transition-duration: 0.4s; /* Safari */
+    -webkit-transition-duration: 0.4s; 
     transition-duration: 0.4s;
     cursor: pointer;
 }
@@ -48,7 +48,7 @@ body{
     background-color:white;
     border:1px solid #a1a1a1;
     border-radius:10px;
-    -webkit-transition-duration: 0.4s; /* Safari */
+    -webkit-transition-duration: 0.4s; 
     transition-duration: 0.4s;
     cursor: pointer;
 }
