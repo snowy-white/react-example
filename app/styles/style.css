@@ -58,12 +58,12 @@ body{
     color: white;
 }
 
-.ra{
+.filter{
     padding-left: 30px;
     color: indigo;
     
 }
-.num{
+.count{
     width:550px;
     border-bottom: solid 1px gray;
     font-size: 16px;

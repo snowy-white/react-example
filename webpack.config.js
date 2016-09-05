@@ -16,12 +16,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        loaders: ['babel'],
-        include: webAppPath
-      },
-      {
-        test: /\.jsx$/,
+        test: /\.js|\.jsx$/,
         loaders: ['babel'],
         include: webAppPath
       },
@@ -38,7 +33,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.json','.css','.html'],
-    alias:{'dir':'./component'}
   },
   plugins: [new HtmlWebpackPlugin({
     template:'public/index.html'

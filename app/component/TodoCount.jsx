@@ -5,28 +5,27 @@ class TodoCount extends Component {
         super(props);
     }
     render() {
-        let undo = 0;
-        let finish = 0;
+        let numofUndoTask = 0;
+        let numofFinishTask = 0;
         const {task}=this.props;
         task.map((item)=> {
-            if (item.flag == true) {
-                undo++;
+            if (item.flag === true) {
+                numofUndoTask++;
             }
             else {
-                finish++;
+                numofFinishTask++;
             }
         });
-        let all=undo+finish;
         return (
-            <div className="num">
-                <p> Total task: {all}    |    Finished task：{finish}    |    Undo task：{undo}</p>
+            <div className="count">
+                <p> Total task: {task.length}    |    Finished task：{numofFinishTask}    |    Undo task：{numofUndoTask}</p>
             </div>
         );
     }
 }
 
-TodoCount.PropTypes = {
-    task:PropTypes.arrayisRequired
+TodoCount.propTypes = {
+    task:PropTypes.array.isRequired
 };
 
 export default TodoCount;

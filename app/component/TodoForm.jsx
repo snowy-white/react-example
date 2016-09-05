@@ -24,8 +24,8 @@ class TodoForm extends Component {
     handleAdd(e) {
         e.preventDefault();
         let taskname = this.state.value.trim();
-        if (taskname != '') {
-            let task={ id: (new Date()).getTime(), text: taskname, flag: true };
+        if (taskname !== '') {
+            let task={ taskid: (new Date()).getTime(), text: taskname, flag: true };
             this.props.addTask(task);
         }
 
@@ -34,7 +34,7 @@ class TodoForm extends Component {
 
 }
 
-TodoForm.PropTypes = {
+TodoForm.propTypes = {
     addTask: PropTypes.func.isRequired
 };
 

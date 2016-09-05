@@ -8,7 +8,7 @@ class Todo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            task: [], flag: "all"
+            tasks: [], filterType: "all"
         };
         this.handleAdd = this.handleAdd.bind(this);
         this.handleDel = this.handleDel.bind(this);
@@ -20,55 +20,45 @@ class Todo extends Component {
             <div>
                 <h1>ToDoMVC System</h1>
                 <TodoForm addTask={this.handleAdd} />
-                <TodoList task={this.state.task} mark={this.state.flag} delTask={this.handleDel} doneTask={this.handleDone} />
-                <TodoFilter selTask={this.handleFilter}/>
-                <TodoCount task={this.state.task}/>
+                <TodoList task={this.state.tasks} filterType={this.state.filterType} delTask={this.handleDel} doneTask={this.handleDone} />
+                <TodoFilter filterTask={this.handleFilter}/>
+                <TodoCount task={this.state.tasks}/>
             </div>
         );
     }
 
     handleAdd(data) {
-        let {task} = this.state;
-        task.push(data);
-        this.setState({ task: task });
+        let {tasks} = this.state;
+        tasks.push(data);
+        this.setState({ tasks });
     }
 
     handleDel(id) {
-        let {task} = this.state;
+        let {tasks} = this.state;
         let index = 0;
-        /*for (let i = 0; i < task.length; i++) {
-            if (id == task[i].id) {
-                index = i;
-                break;
-            }
-        }*/
-        task.map((item, i) => {
-            if (item.id == id) {
+        
+        tasks.map((item, i) => {
+            if (item.taskid === id) {
                 index = i;
             }
         });
-        delete task[index];
-        this.setState({ task: task });
+         tasks.splice(index,1);
+        this.setState({ tasks});
     }
 
     handleDone(id) {
-        let {task} = this.state;
-       /* for (let i = 0; i < task.length; i++) {
-            if (id == task[i].id) {
-                task[i].flag = false;
-                break;
-            }
-        }*/
-        task.map((item) => {
-            if (item.id == id) {
+        let {tasks} = this.state;
+        
+        tasks.map((item) => {
+            if (item.taskid == id) {
                 item.flag = false;
             }
         });
-        this.setState({ task: task });
+        this.setState({ tasks });
     }
 
-    handleFilter(flag) {
-        this.setState({ flag: flag });
+    handleFilter(filterType) {
+        this.setState({ filterType });
     }
 }
 

@@ -4,35 +4,35 @@ class TodoFilter extends Component {
     constructor(props) {
         super(props);
     }
-    handleSel() {
-        let obj = document.getElementsByName("radio");
-        for (let i = 0; i < obj.length; i++) {
-            if (obj[i].value == "all" && obj[i].checked) {
-                this.props.selTask("all");
-            }
-            else if (obj[i].value == "finish" && obj[i].checked) {
-                this.props.selTask("finish");
-            }
-            else if (obj[i].value == "undo" && obj[i].checked) {
-                this.props.selTask("undo");
-            }
+    handleFilter(e) {
+        let value=e.target.getAttribute('value');
+        console.log(value);
+        if (value == "all") {
+            this.props.filterTask("all");
         }
+        else if (value == "finish") {
+            this.props.filterTask("finish");
+        }
+        else if (value == "undo") {
+            this.props.filterTask("undo");
+        }
+
     }
     render() {
         return (
             <div>
-                <div className="ra">
-                    <input type="radio" name="radio" value="all"  onClick={this.handleSel.bind(this) }/>All
-                    <input type="radio" name="radio" value="finish" onClick={this.handleSel.bind(this) }/>Finished
-                    <input type="radio" name="radio" value="undo" onClick={this.handleSel.bind(this) }/>Undo
+                <div className="filter">
+                    <input type="radio" name="radio" value="all"  onClick={this.handleFilter.bind(this) }/>All
+                    <input type="radio" name="radio" value="finish" onClick={this.handleFilter.bind(this) }/>Finished
+                    <input type="radio" name="radio" value="undo" onClick={this.handleFilter.bind(this) }/>Undo
                 </div>
             </div>
         );
     }
 }
 
-TodoFilter.PropTypes={
-    selTask:PropTypes.func.isRequired
+TodoFilter.propTypes = {
+    filterTask: PropTypes.func.isRequired
 };
 
 export default TodoFilter;
