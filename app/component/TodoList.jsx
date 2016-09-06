@@ -4,44 +4,42 @@ class TodoList extends Component {
     constructor(props) {
         super(props);
     }
-    handleDel(e) {
-        let delIndex = e.target.getAttribute('data-key');
-        this.props.delTask(parseInt(delIndex));
+    handleDel(delindex) {
+        this.props.delTask(parseInt(delindex));
     }
-    handleDone(e) {
-        let index = e.target.getAttribute('data-key');
-        this.props.doneTask(parseInt(index));
+    handleDone(doneindex) {
+        this.props.doneTask(parseInt(doneindex));
     }
     render() {
-        let arr = [];
-        const {task,filterType}=this.props;
-        if (filterType === "all") {
-            arr = task;
-        }
-        else if (filterType === "finish") {
-            arr = task.filter((element)=>{
-                return element.flag == false;
-            });
-        }
-        else if (filterType === "undo") {
-            arr = task.filter((element)=>{
-                return element.flag == true;
-            });
-        }
+        const {tasks, filterType} = this.props;
         return (
             <div>
                 <ul id="todo-list">
                     {
-                        arr.map((item)=> {
+                        this.generateDisplayList(tasks,filterType).map((item, i) => {
                             return (
-                                <TodoItem item={item} key={item.taskid} Done={this.handleDone.bind(this) } 
-                                Del={this.handleDel.bind(this) }/>
+                                <TodoItem item={item} key={i} Done={this.handleDone.bind(this, i) }
+                                    Del={this.handleDel.bind(this, i) }/>
                             );
                         })
                     }
                 </ul>
             </div>
         );
+    }
+    generateDisplayList(tasks, filterType) {
+        switch (filterType) {
+            case "FINISH":
+                return tasks.filter((element) => {
+                    return element.flag == false;
+                });
+            case "UNDO":
+                return tasks.filter((element) => {
+                    return element.flag == true;
+                });
+            default:
+                return tasks;
+        }
     }
 }
 
@@ -58,9 +56,9 @@ class TodoItem extends Component {
         return (
             <div>
                 <li>
-                    <lable id={this.props.item.taskid} className={this.handleStyle(this.props.item) }>{this.props.item.text}</lable>
-                    <button className="done" onClick={this.props.Done} data-key={this.props.item.taskid}>Done</button>
-                    <button className="delete" onClick={this.props.Del} data-key={this.props.item.taskid}>Remove</button>
+                    <lable  className={this.handleStyle(this.props.item) }>{this.props.item.text}</lable>
+                    <button className="done" onClick={this.props.Done} >Done</button>
+                    <button className="delete" onClick={this.props.Del}>Remove</button>
                 </li>
             </div>
         );
@@ -70,8 +68,8 @@ class TodoItem extends Component {
 TodoList.propTypes = {
     delTask: PropTypes.func.isRequired,
     doneTask: PropTypes.func.isRequired,
-    task:PropTypes.array.isRequired,
-    filterType:PropTypes.string.isRequired
+    tasks: PropTypes.array.isRequired,
+    filterType: PropTypes.string.isRequired
 };
 
 export default TodoList;

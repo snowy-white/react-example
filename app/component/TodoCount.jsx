@@ -7,8 +7,8 @@ class TodoCount extends Component {
     render() {
         let numofUndoTask = 0;
         let numofFinishTask = 0;
-        const {task}=this.props;
-        task.map((item)=> {
+        const {tasks}=this.props;
+        tasks.map((item)=> {
             if (item.flag === true) {
                 numofUndoTask++;
             }
@@ -18,14 +18,14 @@ class TodoCount extends Component {
         });
         return (
             <div className="count">
-                <p> Total task: {task.length}    |    Finished task：{numofFinishTask}    |    Undo task：{numofUndoTask}</p>
+                <p> Total task: {tasks.length}    |    Finished task：{numofFinishTask}    |    Undo task：{numofUndoTask}</p>
             </div>
         );
     }
 }
 
 TodoCount.propTypes = {
-    task:PropTypes.array.isRequired
+    tasks:PropTypes.array.isRequired
 };
 
 export default TodoCount;
