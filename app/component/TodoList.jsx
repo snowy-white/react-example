@@ -5,10 +5,10 @@ class TodoList extends Component {
         super(props);
     }
     handleDel(delindex) {
-        this.props.delTask(parseInt(delindex));
+        this.props.delTask(delindex);
     }
     handleDone(doneindex) {
-        this.props.doneTask(parseInt(doneindex));
+        this.props.doneTask(doneindex);
     }
     render() {
         const {tasks, filterType} = this.props;
